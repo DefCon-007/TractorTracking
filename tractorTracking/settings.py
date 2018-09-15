@@ -25,7 +25,7 @@ SECRET_KEY = '#ad_-lfy0*k0dgdkg+2n9^cdgj*igw_rbk643s!fuqgd(9s$j#'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'geoposition',
     'mainapp',
+    'rest_framework',
 ]
 
 MIDDLEWARE = [

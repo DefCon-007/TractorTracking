@@ -1,34 +1,61 @@
-<html><body>
-  <div id="mapdiv"></div>
-  <script src="http://www.openlayers.org/api/OpenLayers.js"></script>
-  <script>
-    map = new OpenLayers.Map("mapdiv");
-    map.addLayer(new OpenLayers.Layer.OSM());
-var markers = new OpenLayers.Layer.Markers( "Markers" );
-    {% for data in coordinatesList %}
-        var lonLat = new OpenLayers.LonLat({{ data.longitude }} ,{{ data.latitude }})
-          .transform(
-            new OpenLayers.Projection("EPSG:4326"), // transform from WGS 1984
-            map.getProjectionObject() // to Spherical Mercator Projection
-          );
-         markers.addMarker(new OpenLayers.Marker(lonLat));
+<html>
+<head>
 
-    {% endfor %}
+  <title>Google Maps Multiple Markers</title>
+  <script type="text/javascript" src="//maps.googleapis.com/maps/api/js?key=AIzaSyDZ5sqMueNtrZ1u6lG6ln3KtURMaOcESv4"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
+</head>
+<body>
+  <div id="map" style="height: 400px;">
+</div>
+<script type="text/javascript">
 
- var newlonLat = new OpenLayers.LonLat( -0.2279688 ,51.5077286 )
-          .transform(
-            new OpenLayers.Projection("EPSG:4326"), // transform from WGS 1984
-            map.getProjectionObject() // to Spherical Mercator Projection
-          );
+    var map = new google.maps.Map(document.getElementById('map'), {
+      zoom: 14,
+      center: new google.maps.LatLng(22.317,87.306),
+      mapTypeId: google.maps.MapTypeId.ROADMAP
+    });
 
-    var zoom=16;
+    var infowindow = new google.maps.InfoWindow();
 
+    var marker, i;
 
-    map.addLayer(markers);
+    function sendRequest() {
+     var csrftoken = Cookies.get('csrftoken');
+    let url = "{% url 'getcoordinate' %}" ;
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
 
+        var  jsonobj = JSON.parse(this.response);
+        console.log(jsonobj.data);
 
-     {#markers.addMarker(new OpenLayers.Marker(newlonLat));#}
+        for (var i=0; i<jsonobj.data.length;i++){
+            var lat = jsonobj.data[i].latitude;
+            var lon = jsonobj.data[i].longitude;
+        marker = new google.maps.Marker({
+        position: new google.maps.LatLng(lat, lon),
+        map: map
+      });
 
-    map.setCenter (lonLat, zoom);
+        }
+        map.setCenter(new google.maps.LatLng(lat, lon));
+        {#location.reload(true);#}
+     {#document.getElementById("demo").innerHTML = this.responseText;#}
+          setTimeout(function(){
+                sendRequest();
+            }, 500);
+    }
+  };
+  xhttp.open("GET", url, true);
+  xhttp.setRequestHeader("Content-Type", "application/json");
+  xhttp.setRequestHeader("X-CSRFToken", csrftoken);
+  xhttp.send();
+}
+    sendRequest()
   </script>
-</body></html>
+
+
+</body>
+</html>
