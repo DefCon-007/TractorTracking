@@ -12,7 +12,7 @@
 <script type="text/javascript">
 
     var map = new google.maps.Map(document.getElementById('map'), {
-      zoom: 14,
+      zoom: 18,
       center: new google.maps.LatLng(22.317,87.306),
       mapTypeId: google.maps.MapTypeId.ROADMAP
     });
@@ -30,16 +30,35 @@
 
         var  jsonobj = JSON.parse(this.response);
         console.log(jsonobj.data);
+        var flightPlanCoordinates = [
+            ];
+        var marker = new google.maps.Marker({
+            icon:"https://png.icons8.com/color/50/000000/tractor.png",
+        position :
+        map: map
+              });
 
         for (var i=0; i<jsonobj.data.length;i++){
             var lat = jsonobj.data[i].latitude;
             var lon = jsonobj.data[i].longitude;
-        marker = new google.maps.Marker({
-        position: new google.maps.LatLng(lat, lon),
-        map: map
-      });
+            flightPlanCoordinates.push({"lat" : lat, "lng" : lon});
+        {#marker = new google.maps.Marker({#}
+        {#    icon:"https://png.icons8.com/color/50/000000/tractor.png",#}
+        {#position: new google.maps.LatLng(lat, lon),#}
+        {#map: map#}
+            {#  }); #}
 
         }
+        var flightPath = new google.maps.Polyline({
+          path: flightPlanCoordinates,
+          geodesic: true,
+          strokeColor: '#FF0000',
+          strokeOpacity: 1.0,
+          strokeWeight: 2
+        });
+        marker.setPosition(google.maps.LatLng(lat, lon));
+        flightPath.setMap(map);
+
         map.setCenter(new google.maps.LatLng(lat, lon));
         {#location.reload(true);#}
      {#document.getElementById("demo").innerHTML = this.responseText;#}
