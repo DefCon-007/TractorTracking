@@ -34,7 +34,7 @@
             ];
         var marker = new google.maps.Marker({
             icon:"https://png.icons8.com/color/50/000000/tractor.png",
-        position :
+        {#position :new google.maps.LatLng(jsonobj[jsonobj.length-1].latitude, jsonobj[jsonobj.length-1].longitude),#}
         map: map
               });
 
