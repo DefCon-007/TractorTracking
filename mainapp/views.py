@@ -37,6 +37,17 @@ def sendCoordinates(request) :
     }
     return JsonResponse(resp, status=200)
 
+@api_view(["POST"])
+def addException(request) :
+    data = request.data
+    try :
+        addException(data["exception"], data["rep"])
+    except :
+        pass
+
+def showExceptions(request) :
+    return  render(request, "mainapp/excep.html", context={"list": db.getAllExceptions()})
+
 def clear(request) :
     db.cleardata()
     return redirect("index")

@@ -7,4 +7,6 @@ urlpatterns = [
     path("add/", views.addNewCoordinate),
     path('getcoordinate/', views.sendCoordinates, name="getcoordinate"),
     path('clear', views.clear, name="clear"),
+    path('addexcep', views.addException, name = "addexcep"),
+    path('showexcep', views.showExceptions, name = "showexcep"),
 ]

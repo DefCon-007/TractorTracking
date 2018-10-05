@@ -1,4 +1,4 @@
-from mainapp.models import coordinates
+from mainapp.models import coordinates,scriptExceptions
 
 def getAllCoordinates() :
 
@@ -19,6 +19,30 @@ def getAllCoordinates() :
 
 def cleardata() :
     coordinates.objects.all().delete()
+
+def addNewException(excep,rep) :
+    try :
+        data = scriptExceptions()
+        data.excep = excep
+        data.rep = rep
+        data.save()
+    except Exception as e:
+        print(e)
+        pass
+
+def getAllExceptions() :
+    try :
+        data = scriptExceptions.objects.all()
+        listToReturn = list()
+        for val in data :
+            listToReturn.append({
+                "date" : val.created_at,
+                "excep" : val.excep,
+                "rep" : val.rep,
+            })
+        return listToReturn
+    except :
+        return []
 
 
 def addNewCoordinate(lat,long) :
