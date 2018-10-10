@@ -1,14 +1,60 @@
 <html>
 <head>
 
-  <title>Google Maps Multiple Markers</title>
+  <title>Telematics IIT KGP</title>
   <script type="text/javascript" src="//maps.googleapis.com/maps/api/js?key=AIzaSyDZ5sqMueNtrZ1u6lG6ln3KtURMaOcESv4"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+<style>
+    #container {
+  width: 100%;
+  height: 100%;
+  position: relative;
+        display: inline-block;
+}
+
+#map {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+
+}
+#cord {
+  z-index: 10;
+    display:  inline;
+     background-color: white;
+    table-layout: auto;
+     position: absolute;
+  top: 0;
+  left: 0;
+}
+    table, th, td {
+    border: 1px solid black;
+
+}
+</style>
 </head>
 <body>
-  <div id="map" style="height: 400px;">
+<div id="container">
+
+  <div id="map">
 </div>
+
+        <table id="cord">
+            <tr>
+                <td>Latitude</td>
+                <td id="latTable">-</td>
+            </tr>
+            <tr>
+                <td>Longitude</td>
+                <td id="lonTable">-</td>
+            </tr>
+        </table>
+
+    </div>
 <script type="text/javascript">
 
     var map = new google.maps.Map(document.getElementById('map'), {
@@ -40,12 +86,17 @@
 
         if (jsonobj.data.length == 0){
             map.setCenter(new google.maps.LatLng(22.317, 87.306));
+            const latTable = document.getElementById("latTable");
+            const lonTable = document.getElementById("lonTable");
+            latTable.innerHTML = "22.317";
+            lonTable.innerHTML = "87.306";
         }
         else {
             for (var i = 0; i < jsonobj.data.length; i++) {
                 var lat = jsonobj.data[i].latitude;
                 var lon = jsonobj.data[i].longitude;
                 flightPlanCoordinates.push({"lat": lat, "lng": lon});
+
                 {#marker = new google.maps.Marker({#}
                 {#    icon:"https://png.icons8.com/color/50/000000/tractor.png",#}
                 {#position: new google.maps.LatLng(lat, lon),#}
@@ -64,7 +115,10 @@
             flightPath.setMap(map);
 
             map.setCenter(new google.maps.LatLng(lat, lon));
-
+            const latTable = document.getElementById("latTable");
+            const lonTable = document.getElementById("lonTable");
+            latTable.innerHTML = lat;
+            lonTable.innerHTML = lon;
         }
         {#location.reload(true);#}
      {#document.getElementById("demo").innerHTML = this.responseText;#}
